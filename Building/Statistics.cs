@@ -8,9 +8,9 @@ namespace Building
 {
     class Statistics
     {
-        private int numberOfPersons {get; set;}
-        private int numberOfQuitters { get; set; }
-        private int totalWaitingTime { get; set; }
+        public int numberOfPersons {get; set;}
+        public int numberOfQuitters { get; set; }
+        public int totalWaitingTime { get; set; }
 
         
         public Statistics()
