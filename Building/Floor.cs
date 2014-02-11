@@ -9,57 +9,57 @@ namespace Building
 {
     public class Floor
     {
-        public int floorNumber { get; set; }
-        public Boolean upButtonPressed { get; set; }
-        public Boolean downButtonPressed { get; set; }
+        public int FloorNumber { get; set; }
+        public Boolean IsUpButtonPressed { get; set; }
+        public Boolean IsDownButtonPressed { get; set; }
         private List<Person> personsWaitingForUpList = new List<Person>();
         private List<Person> personsWaitingForDownList = new List<Person>();
 
 
-        public List<Person> getPersonsWaitingForUpList()
+        public List<Person> GetPersonsWaitingForUpList()
         {
             return personsWaitingForUpList;
         }
 
-        public void setPersonsWaitingForUpList(List<Person> personsWaitingForUpList)
+        public void SetPersonsWaitingForUpList(List<Person> personsWaitingForUpList)
         {
             this.personsWaitingForUpList = personsWaitingForUpList;
         }
 
-        public List<Person> getPersonsWaitingForDownList()
+        public List<Person> GetPersonsWaitingForDownList()
         {
             return personsWaitingForDownList;
         }
 
-        public void setPersonsWaitingForDownList(List<Person> personsWaitingForDownList)
+        public void SetPersonsWaitingForDownList(List<Person> personsWaitingForDownList)
         {
             this.personsWaitingForDownList = personsWaitingForDownList;
         }
 
-        public void clearUpList()
+        public void ClearUpList()
         {
             personsWaitingForUpList.Clear();
         }
-        public void clearDownList()
+        public void ClearDownList()
         {
             personsWaitingForDownList.Clear();
         }
 
-        public void addPersonToList(Person person)
+        public void AddPersonToWaitList(Person person)
         {
-            if (person.sourceFloorNumber != this.floorNumber)
+            if (person.SourceFloorNumber != this.FloorNumber)
             {
                 return;
             }
-            else if (person.destinationFloorNumber > person.sourceFloorNumber)
+            else if (person.DestinationFloorNumber > person.SourceFloorNumber)
             {
                 personsWaitingForUpList.Add(person);
-                this.upButtonPressed = true;
+                this.IsUpButtonPressed = true;
             }
             else
             {
                 personsWaitingForDownList.Add(person);
-                this.downButtonPressed=true;
+                this.IsDownButtonPressed=true;
             }
 
         }

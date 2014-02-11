@@ -66,7 +66,7 @@ namespace Building
 
 
             }
-            Console.WriteLine("How much time for simulation? (in seconds)");
+            Console.WriteLine("How many time units for simulation? ");
             while (true)
             {
                 try

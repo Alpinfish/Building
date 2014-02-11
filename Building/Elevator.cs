@@ -9,72 +9,73 @@ namespace Building
 {
     public class Elevator
     {
-        public int elevatorNumber { get; set; }
-        public int currentFloorNo { get; set; }
-        public ElevatorState elevatorState { get; set; }
+        public int Elevator_Id { get; set; }
+        public int CurrentFloorNumber { get; set; }
+        public ElevatorState ElevatorState { get; set; }
+
         private List<Person> passengersList = new List<Person>();	
         private SortedSet<int> pushedButtons = new SortedSet<int>();	
 
 
         
 
-        public List<Person> getPassengersList()
+        public List<Person> GetPassengersList()
         {
             return passengersList;
         }
 
-        public void setPassengersList(List<Person> passengersList)
+        public void SetPassengersList(List<Person> _passengersList)
         {
-            this.passengersList = passengersList;
+            this.passengersList = _passengersList;
         }
 
-        public SortedSet<int> getPushedButtons()
+        public SortedSet<int> GetPushedButtons()
         {
             return pushedButtons;
         }
 
-        public void setPushedButtons(SortedSet<int> pushedButtons)
+        public void SetPushedButtons(SortedSet<int> _pushedButtons)
         {
-            this.pushedButtons = pushedButtons;
+            this.pushedButtons = _pushedButtons;
         }
 
-        public void pressButton(int floorNo)
+        public void PressButton(int floorNo)
         {
             pushedButtons.Add(floorNo);
         }
 
-        public void addPassengerToList(Person person)
+        public void AddPassengerToList(Person person)
         {
-            if (this.currentFloorNo != person.sourceFloorNumber)
+            if (this.CurrentFloorNumber != person.SourceFloorNumber)
             {
                 return;
             }
             else
             {
                 this.passengersList.Add(person);
-                this.pressButton(person.destinationFloorNumber);
+                this.PressButton(person.DestinationFloorNumber);
             }
         }
 
-        public void unLoadPassengers(int floorNo)
+        public void UnLoadPassengers(int floorNo)
         {
             List<Person> personsList = new List<Person>();
             SortedSet<int> buttonsList = new SortedSet<int>();
 
-            if (this.currentFloorNo != floorNo)
+            if (this.CurrentFloorNumber != floorNo)
             {
                 return;
             }
 
             foreach (Person person in passengersList)
             {
-                if (person.destinationFloorNumber != floorNo)
+                if (person.DestinationFloorNumber != floorNo)
                 {
                     personsList.Add(person);
                 }
             }
 
-            this.setPassengersList(passengersList);
+            this.SetPassengersList(passengersList);
 
             foreach (int button in pushedButtons)
             {
@@ -83,10 +84,10 @@ namespace Building
                     buttonsList.Add(button);
                 }
             }
-            this.setPushedButtons(buttonsList);
+            this.SetPushedButtons(buttonsList);
         }
 
-        public Boolean unloadAtThisFloor(int floorNo)
+        public Boolean UnloadAtThisFloor(int floorNo)
         {
             if (pushedButtons.Contains(floorNo))
             {

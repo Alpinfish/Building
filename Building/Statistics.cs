@@ -21,7 +21,7 @@ namespace Building
         }
 
 
-        public void printStatistics()
+        public void PrintStatistics()
         {
             Console.WriteLine("Total Persons Entered : " + numberOfPersons);
             Console.WriteLine("Total Number of Persons who gave up : " + numberOfQuitters);

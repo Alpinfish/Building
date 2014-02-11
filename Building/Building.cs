@@ -11,9 +11,9 @@ namespace Building
 
     public class Building
     {
-        int numberOfFloors;
-        int numberOfElevators;
-        int timeOfOperation; //number of time units for which simulation will run
+        int quantityOfFloors;
+        int quantityOfElevators;
+        int lengthOfOperation; //number of time units for which simulation will run
 
         List<Floor> floorList = new List<Floor>();
         List<Elevator> elevatorList = new List<Elevator>();
@@ -25,13 +25,13 @@ namespace Building
         /// <summary>
         /// The singular constructor method. Use this to create a building.
         /// </summary>
-        /// <param name="numberOfFloors"></param>
-        /// <param name="numberOfElevators"></param>
-        public Building(int numberOfFloors, int numberOfElevators, int timeOfOperation)
+        /// <param name="_quantityOfFloors"></param>
+        /// <param name="_quantityOfElevators"></param>
+        public Building(int _quantityOfFloors, int _quantityOfElevators, int _lengthOfOperation)
         {
-            this.numberOfFloors = numberOfFloors;
-            this.numberOfElevators = numberOfElevators;
-            this.timeOfOperation = timeOfOperation;
+            this.quantityOfFloors = _quantityOfFloors;
+            this.quantityOfElevators = _quantityOfElevators;
+            this.lengthOfOperation = _lengthOfOperation;
         }
 
         private void CreateElevators(int numberOfElevators)
@@ -39,9 +39,9 @@ namespace Building
             for (int elevatorNumber = 1; elevatorNumber <= numberOfElevators; elevatorNumber++)
             {
                 Elevator elevator = new Elevator();
-                elevator.elevatorNumber = elevatorNumber;
-                elevator.currentFloorNo = 0;
-                elevator.elevatorState=ElevatorState.Stationary;
+                elevator.Elevator_Id = elevatorNumber;
+                elevator.CurrentFloorNumber = 0;
+                elevator.ElevatorState = ElevatorState.Stationary;
                 elevatorList.Add(elevator);
             }
         }
@@ -50,15 +50,15 @@ namespace Building
         {
             for (int floorNumber = 0; floorNumber < numberOfFloors; floorNumber++)
             {
-                Floor floor = new Floor();
-                floor.floorNumber=floorNumber;
-                floor.upButtonPressed = false;
-                floor.downButtonPressed = false;
-                floorList.Add(floor);
+                Floor _floor = new Floor();
+                _floor.FloorNumber = floorNumber;
+                _floor.IsUpButtonPressed = false;
+                _floor.IsDownButtonPressed = false;
+                floorList.Add(_floor);
             }
         }
 
-        private BuildingEvent generatePerson()
+        private BuildingEvent GeneratePerson()
         {
             Random generator = new Random();
             double randomNumber = generator.NextDouble();
@@ -70,15 +70,15 @@ namespace Building
             }
 
             BuildingEvent buildingEvent = new PersonArrives();
-            Person person = new Person();
-            Floor floor = new Floor();
+            Person _person = new Person();
+            Floor _floor = new Floor();
 
             //need a source and destination floor, they cant be the same.
-            int sourceFloorNo = generator.Next(numberOfFloors);
-            int destinationFloorNo = generator.Next(numberOfFloors);
+            int sourceFloorNo = generator.Next(quantityOfFloors);
+            int destinationFloorNo = generator.Next(quantityOfFloors);
             while (sourceFloorNo == destinationFloorNo)
             {
-                destinationFloorNo = generator.Next(numberOfFloors);
+                destinationFloorNo = generator.Next(quantityOfFloors);
             }
 
             // maxWaitingTime can be in the range 30 to 180
@@ -86,15 +86,15 @@ namespace Building
             int maxLimit = 180;
             int maxWaitingTime = generator.Next(maxLimit - minLimit + 1) + minLimit;
 
-            person.sourceFloorNumber = sourceFloorNo;
-            person.destinationFloorNumber = destinationFloorNo;
-            person.maxWaitingTime = maxWaitingTime;
-            person.timePastInWaiting = 0;
+            _person.SourceFloorNumber = sourceFloorNo;
+            _person.DestinationFloorNumber = destinationFloorNo;
+            _person.MaxWaitingTime = maxWaitingTime;
+            _person.TimeExpiredWhileWaiting = 0;
 
-            floor = floorList.ElementAt(sourceFloorNo);
+            _floor = floorList.ElementAt(sourceFloorNo);
 
-            ((PersonArrives)buildingEvent).setFloor(floor);
-            ((PersonArrives)buildingEvent).setPerson(person);
+            ((PersonArrives)buildingEvent).Floor = _floor;
+            ((PersonArrives)buildingEvent).Person = _person;
 
             return buildingEvent;
 
@@ -109,9 +109,9 @@ namespace Building
         {
             BuildingEvent buildingEvent;
             int personNumber = 1;
-            initialize();
+            Initialize();
 
-            for (int time = 0; time < timeOfOperation; )
+            for (int time = 0; time < lengthOfOperation; )
             {
                 BuildingEvent eventToExecute = eventsQueue.First();
                 eventsQueue.RemoveFirst();
@@ -120,12 +120,12 @@ namespace Building
                 {
                     if (eventToExecute is PersonArrives)
                     {
-                        ((PersonArrives)eventToExecute).getPerson().setPersonNo(personNumber) ;
+                        ((PersonArrives)eventToExecute).Person.PersonNumber = personNumber;
                         personNumber++;
                     }
 
-                    eventToExecute.happen();
-                    buildingEvent = generatePerson();
+                    eventToExecute.Happen();
+                    buildingEvent = GeneratePerson();
                     if (buildingEvent != null)
                     {
                         eventsQueue.AddFirst(buildingEvent);
@@ -138,13 +138,13 @@ namespace Building
                     time++;
                     Console.WriteLine("");
                     Console.WriteLine("Time : " + (time));
-                    eventToExecute.happen();
+                    eventToExecute.Happen();
 
                     BuildingEvent elevatorNextChange = new ElevatorsChangeState(elevatorList, floorList,
-                        statistics, numberOfFloors, numberOfElevators);
+                        statistics, quantityOfFloors, quantityOfElevators);
 
                     eventsQueue.AddFirst(elevatorNextChange);
-                    buildingEvent = generatePerson();
+                    buildingEvent = GeneratePerson();
 
                     if (buildingEvent != null)
                     {
@@ -156,16 +156,16 @@ namespace Building
                     BuildingEvent personsGiveUp = new PersonsGiveUpAndLeave(floorList, statistics);
                     eventsQueue.AddFirst(personsGiveUp);
                 }
-                
 
-                
-                
+
+
+
 
 
             }
             Console.WriteLine("");
             Console.WriteLine("Final statistics : ");
-            statistics.printStatistics();
+            statistics.PrintStatistics();
             Console.ReadKey();
         }
 
@@ -173,7 +173,7 @@ namespace Building
         /// 
         /// </summary>
         /// <returns>A List of type Floor.</returns>
-        public List<Floor> getFloorList()
+        public List<Floor> GetFloorList()
         {
             return floorList;
         }
@@ -182,7 +182,7 @@ namespace Building
         /// 
         /// </summary>
         /// <returns>A List of type Elevator.</returns>
-        public List<Elevator> getElevatorList()
+        public List<Elevator> GetElevatorList()
         {
             return elevatorList;
         }
@@ -191,7 +191,7 @@ namespace Building
         /// Set the floor list for the building
         /// </summary>
         /// <param name="floorList"></param>
-        public void setFloorList(List<Floor> floorList)
+        public void SetFloorList(List<Floor> floorList)
         {
             this.floorList = floorList;
         }
@@ -200,7 +200,7 @@ namespace Building
         /// Set the elevator list for the building
         /// </summary>
         /// <param name="elevatorList"></param>
-        public void setElevatorList(List<Elevator> elevatorList)
+        public void SetElevatorList(List<Elevator> elevatorList)
         {
             this.elevatorList = elevatorList;
         }
@@ -209,17 +209,17 @@ namespace Building
         /// Get the events held in the cue.
         /// </summary>
         /// <returns>A LinkedList of type BuildingEvent</returns>
-        public LinkedList<BuildingEvent> getEventsQueue()
+        public LinkedList<BuildingEvent> GetEventsQueue()
         {
             return eventsQueue;
         }
 
-        private void initialize()
+        private void Initialize()
         {
-            BuildingEvent bEvent = new ElevatorsChangeState(elevatorList, floorList, statistics, numberOfFloors, numberOfElevators);
+            BuildingEvent bEvent = new ElevatorsChangeState(elevatorList, floorList, statistics, quantityOfFloors, quantityOfElevators);
             eventsQueue.AddFirst(bEvent);
-            CreateFloors(numberOfFloors);
-            CreateElevators(numberOfElevators);
+            CreateFloors(quantityOfFloors);
+            CreateElevators(quantityOfElevators);
         }
 
 

@@ -12,8 +12,8 @@ namespace Building
         private List<Elevator> elevatorList;
         private List<Floor> floorList;
         private Statistics statistics;
-        private int numberOfFloors;
-        private int numberOfElevators;
+        private int quantityOfFloors;
+        private int quantityOfElevators;
 
 
         /// <summary>
@@ -22,29 +22,29 @@ namespace Building
         /// <param name="elevatorList"></param>
         /// <param name="floorList"></param>
         /// <param name="statistics"></param>
-        /// <param name="numberOfFloors"></param>
-        /// <param name="numberOfElevators"></param>
+        /// <param name="_quantityOfFloors"></param>
+        /// <param name="_quantityOfElevators"></param>
         public ElevatorsChangeState(List<Elevator> elevatorList, List<Floor> floorList,
-            Statistics statistics, int numberOfFloors, int numberOfElevators)
+            Statistics statistics, int _quantityOfFloors, int _quantityOfElevators)
         {
 
             this.elevatorList = elevatorList;
             this.floorList = floorList;
             this.statistics = statistics;
-            this.numberOfFloors = numberOfFloors;
-            this.numberOfElevators = numberOfElevators;
+            this.quantityOfFloors = _quantityOfFloors;
+            this.quantityOfElevators = _quantityOfElevators;
         }
 
 
         /// <summary>
         /// 
         /// </summary>
-        public override void happen()
+        public override void Happen()
         {
             int elevatorNumber = 1;
             foreach (Elevator elevator in elevatorList)
             {
-                executeNextMove(elevator);
+                ExecuteNextMove(elevator);
                 elevatorNumber++;
             }
         }
@@ -54,30 +54,20 @@ namespace Building
         /// 
         /// </summary>
         /// <param name="elevator"></param>
-        private void executeNextMove(Elevator elevator)
-        {
-            int currentFloorNumber;
-            Floor floor;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="elevator"></param>
         /// <param name="personsList"></param>
         /// <param name="resultingElevatorState"></param>
-        private void passengersEnterElevator(Elevator elevator, List<Person> personsList,
+        private void PassengersEnterElevator(Elevator elevator, List<Person> personsList,
             ElevatorState resultingElevatorState)
         {
             foreach (Person person in personsList)
             {
-                elevator.addPassengerToList(person);
-                statistics.totalWaitingTime = statistics.totalWaitingTime + person.timePastInWaiting;
+                elevator.AddPassengerToList(person);
+                statistics.totalWaitingTime = statistics.totalWaitingTime + person.TimeExpiredWhileWaiting;
                 Console.WriteLine("Person No. " + person.PersonNumber +
-                    " at floor " + person.sourceFloorNumber +
-                    " entered elevator number " + elevator.elevatorNumber);
+                    " at _floor " + person.SourceFloorNumber +
+                    " entered elevator number " + elevator.Elevator_Id);
             }
-            elevator.elevatorState = resultingElevatorState;
+            elevator.ElevatorState = resultingElevatorState;
         }
 
         /// <summary>
@@ -85,21 +75,21 @@ namespace Building
         /// </summary>
         /// <param name="elevator"></param>
         /// <param name="floor"></param>
-        private void unloadElevator(Elevator elevator, Floor floor)
+        private void UnloadElevator(Elevator elevator, Floor floor)
         {
-            int currentFloorNumber = floor.floorNumber;
-            elevator.unLoadPassengers(currentFloorNumber);
+            int currentFloorNumber = floor.FloorNumber;
+            elevator.UnLoadPassengers(currentFloorNumber);
 
-            Console.WriteLine("Passengers exit elevator number " + elevator.elevatorNumber +
-                " at floor number " + currentFloorNumber);
-            if (elevator.elevatorState == ElevatorState.UnloadingGoingUp)
+            Console.WriteLine("Passengers exit elevator number " + elevator.Elevator_Id +
+                " at _floor number " + currentFloorNumber);
+            if (elevator.ElevatorState == ElevatorState.UnloadingGoingUp)
             {
-                elevator.elevatorState = ElevatorState.WaitingUp;
+                elevator.ElevatorState = ElevatorState.WaitingUp;
 
             }
-            else if (elevator.elevatorState == ElevatorState.UnloadingGoingDown)
+            else if (elevator.ElevatorState == ElevatorState.UnloadingGoingDown)
             {
-                elevator.elevatorState = ElevatorState.WaitingDown;
+                elevator.ElevatorState = ElevatorState.WaitingDown;
             }
 
         }
@@ -109,48 +99,48 @@ namespace Building
         /// </summary>
         /// <param name="elevator"></param>
         /// <param name="floor"></param>
-        private void loadOrMoveElevator(Elevator elevator, Floor floor)
+        private void LoadOrMoveElevator(Elevator elevator, Floor floor)
         {
-            int currentFloorNo = floor.floorNumber;
+            int currentFloorNo = floor.FloorNumber;
 
             //ToDo:comment this
             //elevator moving up
-            if (elevator.elevatorState == ElevatorState.WaitingUp || elevator.currentFloorNo == 0)
+            if (elevator.ElevatorState == ElevatorState.WaitingUp || elevator.CurrentFloorNumber == 0)
             {
-                floor.upButtonPressed = false;
-                if (floor.getPersonsWaitingForUpList().Any())
+                floor.IsUpButtonPressed = false;
+                if (floor.GetPersonsWaitingForUpList().Any())
                 {
-                    passengersEnterElevator(elevator, floor.getPersonsWaitingForUpList(), ElevatorState.MovingUp);
-                    floor.clearUpList();
+                    PassengersEnterElevator(elevator, floor.GetPersonsWaitingForUpList(), ElevatorState.MovingUp);
+                    floor.ClearUpList();
 
                 }
-                else if (!floor.getPersonsWaitingForDownList().Any() && currentFloorNo != 0
-                    && !elevator.getPassengersList().Any())
+                else if (!floor.GetPersonsWaitingForDownList().Any() && currentFloorNo != 0
+                    && !elevator.GetPassengersList().Any())
                 {
-                    floor.downButtonPressed = false;
-                    if (floor.getPersonsWaitingForDownList().Any())
+                    floor.IsDownButtonPressed = false;
+                    if (floor.GetPersonsWaitingForDownList().Any())
                     {
-                        passengersEnterElevator(elevator, floor.getPersonsWaitingForDownList(), ElevatorState.MovingDown);
-                        floor.clearDownList();
+                        PassengersEnterElevator(elevator, floor.GetPersonsWaitingForDownList(), ElevatorState.MovingDown);
+                        floor.ClearDownList();
 
                     }
                 }
-                else if (elevator.getPassengersList().Any() && currentFloorNo != numberOfFloors - 1)
+                else if (elevator.GetPassengersList().Any() && currentFloorNo != quantityOfFloors - 1)
                 {
-                    elevator.currentFloorNo = currentFloorNo + 1;
-                    Console.WriteLine("Elevator No. " + elevator.elevatorNumber + " moves to " + (currentFloorNo + 1));
-                    if (elevator.unloadAtThisFloor(currentFloorNo + 1))
+                    elevator.CurrentFloorNumber = currentFloorNo + 1;
+                    Console.WriteLine("Elevator No. " + elevator.Elevator_Id + " moves to " + (currentFloorNo + 1));
+                    if (elevator.UnloadAtThisFloor(currentFloorNo + 1))
                     {
-                        elevator.elevatorState = ElevatorState.UnloadingGoingUp;
+                        elevator.ElevatorState = ElevatorState.UnloadingGoingUp;
 
                     }
-                    else if (currentFloorNo + 1 == numberOfFloors - 1)
+                    else if (currentFloorNo + 1 == quantityOfFloors - 1)
                     {
-                        elevator.elevatorState = ElevatorState.WaitingUp;
+                        elevator.ElevatorState = ElevatorState.WaitingUp;
                     }
                     else
                     {
-                        elevator.elevatorState = ElevatorState.MovingUp;
+                        elevator.ElevatorState = ElevatorState.MovingUp;
                     }
 
                 }
@@ -160,48 +150,190 @@ namespace Building
 
             //ToDo: comment this
             //elevator moving down
-            else if (elevator.elevatorState == ElevatorState.WaitingDown || elevator.currentFloorNo == numberOfFloors - 1)
+            else if (elevator.ElevatorState == ElevatorState.WaitingDown || elevator.CurrentFloorNumber == quantityOfFloors - 1)
             {
 
-                floor.downButtonPressed = false;
+                floor.IsDownButtonPressed = false;
 
-                if (floor.getPersonsWaitingForDownList().Any())
+                if (floor.GetPersonsWaitingForDownList().Any())
                 {
-                    passengersEnterElevator(elevator, floor.getPersonsWaitingForDownList(), ElevatorState.MovingDown);
-                    floor.clearDownList();
+                    PassengersEnterElevator(elevator, floor.GetPersonsWaitingForDownList(), ElevatorState.MovingDown);
+                    floor.ClearDownList();
                 }
-                else if (floor.getPersonsWaitingForUpList().Any() && currentFloorNo != numberOfFloors - 1
-                    && !elevator.getPassengersList().Any())
+                else if (floor.GetPersonsWaitingForUpList().Any() && currentFloorNo != quantityOfFloors - 1
+                    && !elevator.GetPassengersList().Any())
                 {
-                    floor.upButtonPressed = false;
-                    if (floor.getPersonsWaitingForUpList().Any())
+                    floor.IsUpButtonPressed = false;
+                    if (floor.GetPersonsWaitingForUpList().Any())
                     {
-                        passengersEnterElevator(elevator, floor.getPersonsWaitingForUpList(), ElevatorState.MovingUp);
-                        floor.clearUpList();
+                        PassengersEnterElevator(elevator, floor.GetPersonsWaitingForUpList(), ElevatorState.MovingUp);
+                        floor.ClearUpList();
                     }
                 }
-                else if (elevator.getPassengersList().Any() && currentFloorNo != 0)
+                else if (elevator.GetPassengersList().Any() && currentFloorNo != 0)
                 {
-                    elevator.currentFloorNo = currentFloorNo - 1;
-                    Console.WriteLine("Elevator No. " + elevator.elevatorNumber + " moves to " + (currentFloorNo - 1));
-                    if (elevator.unloadAtThisFloor(currentFloorNo - 1))
+                    elevator.CurrentFloorNumber = currentFloorNo - 1;
+                    Console.WriteLine("Elevator No. " + elevator.Elevator_Id + " moves to " + (currentFloorNo - 1));
+                    if (elevator.UnloadAtThisFloor(currentFloorNo - 1))
                     {
-                        elevator.elevatorState = ElevatorState.UnloadingGoingDown;
+                        elevator.ElevatorState = ElevatorState.UnloadingGoingDown;
                     }
                     else if (currentFloorNo - 1 == 0)
                     {
-                        elevator.elevatorState = ElevatorState.WaitingDown;
+                        elevator.ElevatorState = ElevatorState.WaitingDown;
                     }
                     else
                     {
-                        elevator.elevatorState = ElevatorState.MovingUp;
+                        elevator.ElevatorState = ElevatorState.MovingUp;
                     }
                 }
             }
 
-            if (!elevator.getPushedButtons().Any())
+            if (!elevator.GetPushedButtons().Any())
             {
-                elevator.elevatorState = ElevatorState.Stationary;
+                elevator.ElevatorState = ElevatorState.Stationary;
+            }
+        }
+
+        //todo: comment this
+        private void MoveElevator(Elevator elevator)
+        {
+            int currentFloorNo = elevator.CurrentFloorNumber;
+            Floor currentFloor = floorList.ElementAt(currentFloorNo);
+
+            if (currentFloor.IsUpButtonPressed)
+            {
+                currentFloor.IsUpButtonPressed = false;
+                if (currentFloor.GetPersonsWaitingForUpList().Any())
+                {
+                    PassengersEnterElevator(elevator, currentFloor.GetPersonsWaitingForUpList(), ElevatorState.MovingUp);
+                    currentFloor.ClearUpList();
+                }
+                return;
+            }
+            else if (currentFloor.IsDownButtonPressed)
+            {
+                currentFloor.IsDownButtonPressed = false;
+                if (currentFloor.GetPersonsWaitingForDownList().Any())
+                {
+                    PassengersEnterElevator(elevator, currentFloor.GetPersonsWaitingForDownList(), ElevatorState.MovingDown);
+                    currentFloor.ClearDownList();
+                }
+                return;
+            }
+
+            int floorsToMove = 1;
+            while (currentFloorNo + floorsToMove < quantityOfFloors || currentFloorNo - floorsToMove >= 0)
+            {
+                int upperFloorNo = currentFloorNo + floorsToMove;
+                int lowerFloorNo = currentFloorNo - floorsToMove;
+                Floor upperFloorToCheck = null;
+                Floor lowerFloorToCheck = null;
+
+                if (upperFloorNo < quantityOfFloors)
+                {
+                    upperFloorToCheck = floorList.ElementAt(upperFloorNo);
+                }
+                if (lowerFloorNo >= 0)
+                {
+                    lowerFloorToCheck = floorList.ElementAt(lowerFloorNo);
+                }
+
+                if (upperFloorToCheck != null && lowerFloorToCheck != null)
+                {
+                    if (upperFloorToCheck.IsUpButtonPressed)
+                    {
+                        elevator.ElevatorState = ElevatorState.MovingUp;
+                        return;
+                    }
+                    else if (lowerFloorToCheck.IsDownButtonPressed)
+                    {
+                        elevator.ElevatorState = ElevatorState.MovingDown;
+                    }
+                    else if (upperFloorToCheck.IsDownButtonPressed)
+                    {
+                        elevator.ElevatorState = ElevatorState.MovingUp;
+                    }
+                    else if (lowerFloorToCheck.IsUpButtonPressed)
+                    {
+                        elevator.ElevatorState = ElevatorState.MovingDown;
+                    }
+
+
+                }
+                else if (upperFloorToCheck != null)
+                {
+                    if (upperFloorToCheck.IsDownButtonPressed || upperFloorToCheck.IsUpButtonPressed)
+                    {
+                        elevator.ElevatorState = ElevatorState.MovingUp;
+                        return;
+                    }
+                }
+                else if (lowerFloorToCheck != null)
+                {
+                    if (lowerFloorToCheck.IsDownButtonPressed || lowerFloorToCheck.IsUpButtonPressed)
+                    {
+                        elevator.ElevatorState = ElevatorState.MovingDown;
+                        return;
+                    }
+                }
+
+                floorsToMove++;
+
+            }
+        }
+
+        private void ExecuteNextMove(Elevator elevator)
+        {
+            int currentFloorNumber;
+            Floor floor;
+
+            if (elevator.ElevatorState == ElevatorState.MovingUp)
+            {
+                currentFloorNumber = elevator.CurrentFloorNumber + 1;
+                Console.WriteLine("Elevator No. " + elevator.Elevator_Id + " moves to " + currentFloorNumber);
+                elevator.CurrentFloorNumber = currentFloorNumber;
+                floor = floorList.ElementAt(currentFloorNumber);
+
+                if (elevator.UnloadAtThisFloor(currentFloorNumber))
+                {
+                    elevator.ElevatorState = ElevatorState.UnloadingGoingUp;
+                }
+
+                else if (floor.IsUpButtonPressed || currentFloorNumber == quantityOfFloors - 1)
+                {
+                    elevator.ElevatorState = ElevatorState.WaitingUp;
+                }
+            }
+            else if (elevator.ElevatorState == ElevatorState.MovingDown)
+            {
+                currentFloorNumber = elevator.CurrentFloorNumber - 1;
+                Console.WriteLine("Elevator No. " + elevator.Elevator_Id + " moves to " + currentFloorNumber);
+                elevator.CurrentFloorNumber = currentFloorNumber;
+                floor = floorList.ElementAt(currentFloorNumber);
+
+
+                if (elevator.UnloadAtThisFloor(currentFloorNumber))
+                {
+                    elevator.ElevatorState = ElevatorState.UnloadingGoingDown;
+
+                }
+                else if (floor.IsDownButtonPressed || currentFloorNumber == 0)
+                {
+                    elevator.ElevatorState = ElevatorState.WaitingDown;
+                }
+            }
+
+            else if (elevator.ElevatorState == ElevatorState.UnloadingGoingDown || elevator.ElevatorState == ElevatorState.UnloadingGoingUp)
+            {
+                currentFloorNumber = elevator.CurrentFloorNumber;
+                floor = floorList.ElementAt(currentFloorNumber);
+                UnloadElevator(elevator, floor);
+            }
+
+            else
+            {
+                MoveElevator(elevator);
             }
         }
 

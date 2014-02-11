@@ -9,20 +9,20 @@ namespace Building
     public class Person
     {
 
-        public int PersonNumber;
-        public int sourceFloorNumber { get; set; } 	//person waits at this floor for elevator
-        public int destinationFloorNumber {  get;  set; } 	//person wants to go to this floor
-        public int maxWaitingTime { get; set; } 	//maximum time person will wait for elevator
-        public int timePastInWaiting { get; set; } 	//the time person has spent in waiting. initially it is 0.
+        public int PersonNumber { get; set; }
+        public int SourceFloorNumber { get; set; } 	
+        public int DestinationFloorNumber {  get;  set; } 	
+        public int MaxWaitingTime { get; set; } 	
+        public int TimeExpiredWhileWaiting { get; set; } 	
 
-        public void incrementWaitingTime()
+        public void IncrementWaitingTime()
         {
-            timePastInWaiting = timePastInWaiting + 1;
+            TimeExpiredWhileWaiting++;
         }
 
-        public Boolean giveUpAndLeave()
+        public Boolean GiveUpAndLeave()
         {
-            if (maxWaitingTime == timePastInWaiting)
+            if (MaxWaitingTime == TimeExpiredWhileWaiting)
             {
                 return true;
             }
@@ -32,15 +32,6 @@ namespace Building
             }
         }
 
-        public int getPersonNo()
-        {
-            return PersonNumber;
-        }
-
-        public void setPersonNo(int personNo)
-        {
-            this.PersonNumber = personNo;
-        }
 
 
     }

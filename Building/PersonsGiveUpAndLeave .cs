@@ -10,7 +10,7 @@ namespace Building
     {
 
         private List<Floor> floorList;
-        Statistics statistics;
+        private Statistics statistics;
 
         public PersonsGiveUpAndLeave(List<Floor> floorList, Statistics statistics)
         {
@@ -20,43 +20,43 @@ namespace Building
         }
 
 
-        override public void happen()
+        override public void Happen()
         {
             foreach (Floor floor in floorList)
             {
                 List<Person> personsWaitingForUpList = new List<Person>();
                 List<Person> personsWaitingForDownList = new List<Person>();
 
-                foreach (Person person in floor.getPersonsWaitingForDownList())
+                foreach (Person person in floor.GetPersonsWaitingForDownList())
                 {
-                    person.incrementWaitingTime();
-                    if (!person.giveUpAndLeave())
+                    person.IncrementWaitingTime();
+                    if (!person.GiveUpAndLeave())
                     {
                         personsWaitingForDownList.Add(person);
                     }
                     else
                     {
                         statistics.numberOfQuitters++;
-                        Console.WriteLine("Person No. " + person.PersonNumber + " at floor No. " + floor.floorNumber + " gives up and leaves.");
+                        Console.WriteLine("Person No. " + person.PersonNumber + " at _floor No. " + floor.FloorNumber + " gives up and leaves.");
                     }
                 }
 
-                foreach (Person person in floor.getPersonsWaitingForUpList())
+                foreach (Person person in floor.GetPersonsWaitingForUpList())
                 {
-                    person.incrementWaitingTime();
-                    if (!person.giveUpAndLeave())
+                    person.IncrementWaitingTime();
+                    if (!person.GiveUpAndLeave())
                     {
                         personsWaitingForUpList.Add(person);
                     }
                     else
                     {
                         statistics.numberOfQuitters++;
-                        Console.WriteLine("Person No. " + person.PersonNumber + " at floor No. " + floor.floorNumber + " gives up and leaves.");
+                        Console.WriteLine("Person No. " + person.PersonNumber + " at _floor No. " + floor.FloorNumber + " gives up and leaves.");
                     }
                 }
 
-                floor.setPersonsWaitingForUpList(personsWaitingForUpList);
-                floor.setPersonsWaitingForDownList(personsWaitingForDownList);
+                floor.SetPersonsWaitingForUpList(personsWaitingForUpList);
+                floor.SetPersonsWaitingForDownList(personsWaitingForDownList);
 
             }
         }

@@ -8,33 +8,15 @@ namespace Building
 {
     class PersonArrives : BuildingEvent
     {
-        private Person person;
-        private Floor floor;
+        public Person Person { get; set; }
+        public Floor Floor { get; set; }
 
-        public Person getPerson()
+       
+        override public void Happen()
         {
-            return person;
-        }
-
-        public Floor getFloor()
-        {
-            return floor;
-        }
-
-        public void setPerson(Person person)
-        {
-            this.person = person;
-        }
-
-        public void setFloor(Floor floor)
-        {
-            this.floor = floor;
-        }
-        override public void happen()
-        {
-            floor.addPersonToList(person);
-            Console.WriteLine("Person No. " + person.PersonNumber +
-            " arrives at floor No. : " + floor.floorNumber);
+            Floor.AddPersonToWaitList(Person);
+            Console.WriteLine("Person No. " + Person.PersonNumber +
+            " arrives at _floor No. : " + Floor.FloorNumber);
         }
     }
 }

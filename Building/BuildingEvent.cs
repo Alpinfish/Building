@@ -11,6 +11,6 @@ namespace Building
         /// <summary>
         /// An abstract class for various events during simulation.
         /// </summary>
-        public abstract void happen();
+        public abstract void Happen();
     }
 }
