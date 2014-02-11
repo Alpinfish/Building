@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Building
 {
@@ -19,18 +17,18 @@ namespace Building
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="elevatorList"></param>
-        /// <param name="floorList"></param>
-        /// <param name="statistics"></param>
+        /// <param name="_elevatorList"></param>
+        /// <param name="_floorList"></param>
+        /// <param name="_statistics"></param>
         /// <param name="_quantityOfFloors"></param>
         /// <param name="_quantityOfElevators"></param>
-        public ElevatorsChangeState(List<Elevator> elevatorList, List<Floor> floorList,
-            Statistics statistics, int _quantityOfFloors, int _quantityOfElevators)
+        public ElevatorsChangeState(List<Elevator> _elevatorList, List<Floor> _floorList,
+            Statistics _statistics, int _quantityOfFloors, int _quantityOfElevators)
         {
 
-            this.elevatorList = elevatorList;
-            this.floorList = floorList;
-            this.statistics = statistics;
+            this.elevatorList = _elevatorList;
+            this.floorList = _floorList;
+            this.statistics = _statistics;
             this.quantityOfFloors = _quantityOfFloors;
             this.quantityOfElevators = _quantityOfElevators;
         }
@@ -41,11 +39,11 @@ namespace Building
         /// </summary>
         public override void Happen()
         {
-            int elevatorNumber = 1;
+            int elevatorIDNumber = 1;
             foreach (Elevator elevator in elevatorList)
             {
                 ExecuteNextMove(elevator);
-                elevatorNumber++;
+                elevatorIDNumber++;
             }
         }
 
@@ -64,7 +62,7 @@ namespace Building
                 elevator.AddPassengerToList(person);
                 statistics.totalWaitingTime = statistics.totalWaitingTime + person.TimeExpiredWhileWaiting;
                 Console.WriteLine("Person No. " + person.PersonNumber +
-                    " at _floor " + person.SourceFloorNumber +
+                    " at floor " + person.SourceFloorNumber +
                     " entered elevator number " + elevator.Elevator_Id);
             }
             elevator.ElevatorState = resultingElevatorState;
@@ -81,7 +79,7 @@ namespace Building
             elevator.UnLoadPassengers(currentFloorNumber);
 
             Console.WriteLine("Passengers exit elevator number " + elevator.Elevator_Id +
-                " at _floor number " + currentFloorNumber);
+                " at floor number " + currentFloorNumber);
             if (elevator.ElevatorState == ElevatorState.UnloadingGoingUp)
             {
                 elevator.ElevatorState = ElevatorState.WaitingUp;
@@ -114,8 +112,8 @@ namespace Building
                     floor.ClearUpList();
 
                 }
-                else if (!floor.GetPersonsWaitingForDownList().Any() && currentFloorNo != 0
-                    && !elevator.GetPassengersList().Any())
+                else if (floor.GetPersonsWaitingForDownList().Any() && currentFloorNo != 0
+                    && (!(elevator.GetPassengersList().Any())))
                 {
                     floor.IsDownButtonPressed = false;
                     if (floor.GetPersonsWaitingForDownList().Any())
@@ -161,7 +159,7 @@ namespace Building
                     floor.ClearDownList();
                 }
                 else if (floor.GetPersonsWaitingForUpList().Any() && currentFloorNo != quantityOfFloors - 1
-                    && !elevator.GetPassengersList().Any())
+                    && (!(elevator.GetPassengersList().Any())))
                 {
                     floor.IsUpButtonPressed = false;
                     if (floor.GetPersonsWaitingForUpList().Any())
@@ -189,7 +187,7 @@ namespace Building
                 }
             }
 
-            if (!elevator.GetPushedButtons().Any())
+            if (!(elevator.GetPushedButtons().Any()))
             {
                 elevator.ElevatorState = ElevatorState.Stationary;
             }
@@ -283,6 +281,8 @@ namespace Building
             }
         }
 
+
+        //ToDo: comment this
         private void ExecuteNextMove(Elevator elevator)
         {
             int currentFloorNumber;

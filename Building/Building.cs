@@ -164,7 +164,7 @@ namespace Building
 
             }
             Console.WriteLine("");
-            Console.WriteLine("Final statistics : ");
+            Console.WriteLine("Final _statistics : ");
             statistics.PrintStatistics();
             Console.ReadKey();
         }
