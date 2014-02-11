@@ -11,9 +11,9 @@ namespace Building
 
     public class Building
     {
-        int quantityOfFloors;
-        int quantityOfElevators;
-        int lengthOfOperation; //number of time units for which simulation will run
+        int quantityOfFloors; //The number of floors this building has
+        int quantityOfElevators; //The number of elevators this building has
+        int lengthOfOperation; //How long will the building operate
 
         List<Floor> floorList = new List<Floor>();
         List<Elevator> elevatorList = new List<Elevator>();
@@ -34,6 +34,10 @@ namespace Building
             this.lengthOfOperation = _lengthOfOperation;
         }
 
+        /// <summary>
+        /// Create all elevators in the building, and set the to default status.
+        /// </summary>
+        /// <param name="numberOfElevators"></param>
         private void CreateElevators(int numberOfElevators)
         {
             for (int elevatorNumber = 1; elevatorNumber <= numberOfElevators; elevatorNumber++)
@@ -46,6 +50,10 @@ namespace Building
             }
         }
 
+        /// <summary>
+        /// Create all floors in the building, and set the up and down buttons to false
+        /// </summary>
+        /// <param name="numberOfFloors"></param>
         private void CreateFloors(int numberOfFloors)
         {
             for (int floorNumber = 0; floorNumber < numberOfFloors; floorNumber++)
@@ -58,12 +66,16 @@ namespace Building
             }
         }
 
+        /// <summary>
+        /// Generate one person, who arrives at a random floor, and wants to go to another random floor.
+        /// </summary>
+        /// <returns>A PersonArrives BuildingEvent </returns>
         private BuildingEvent GeneratePerson()
         {
             Random generator = new Random();
             double randomNumber = generator.NextDouble();
 
-            //the probability of returning null is 0.5
+            //the probability of returning null is 0.5. This value can be anything < 1 and > 0.
             if (randomNumber > 0.5)
             {
                 return null;
@@ -81,7 +93,7 @@ namespace Building
                 destinationFloorNo = generator.Next(quantityOfFloors);
             }
 
-            // maxWaitingTime can be in the range 30 to 180
+            // maxWaitingTime can be in the range 30 to 180. This value is arbitrary.
             int minLimit = 30;
             int maxLimit = 180;
             int maxWaitingTime = generator.Next(maxLimit - minLimit + 1) + minLimit;
@@ -103,7 +115,7 @@ namespace Building
 
 
         /// <summary>
-        /// 
+        /// Call this method to run the simulation with the entered values
         /// </summary>
         public void Run()
         {
@@ -120,7 +132,7 @@ namespace Building
                 {
                     if (eventToExecute is PersonArrives)
                     {
-                        ((PersonArrives)eventToExecute).Person.PersonNumber = personNumber;
+                        ((PersonArrives)eventToExecute).Person.Person_Id = personNumber;
                         personNumber++;
                     }
 
@@ -170,7 +182,7 @@ namespace Building
         }
 
         /// <summary>
-        /// 
+        /// Self explanitory.
         /// </summary>
         /// <returns>A List of type Floor.</returns>
         public List<Floor> GetFloorList()
@@ -179,7 +191,7 @@ namespace Building
         }
 
         /// <summary>
-        /// 
+        /// Self explanitory.
         /// </summary>
         /// <returns>A List of type Elevator.</returns>
         public List<Elevator> GetElevatorList()
@@ -214,6 +226,9 @@ namespace Building
             return eventsQueue;
         }
 
+        /// <summary>
+        /// The start values for the simulation, and the call to the construction company to build our building. 
+        /// </summary>
         private void Initialize()
         {
             BuildingEvent bEvent = new ElevatorsChangeState(elevatorList, floorList, statistics, quantityOfFloors, quantityOfElevators);

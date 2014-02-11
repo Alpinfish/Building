@@ -8,7 +8,9 @@ namespace Building
 {
     /// <summary>
     /// A program to simulate a building with elevators and people.
-    /// <para>Author: Jason Astuto</para>
+    /// Author: Jason A. Astuto
+    /// Jason.Astuto@sustrugi.com
+    /// Use at your own risk, but give me credit!
     /// </summary>
     class Program
     {

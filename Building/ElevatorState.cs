@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Building
 {
+    /// <summary>
+    /// An enumeration to hold the fixed states of an elevator.
+    /// </summary>
     public enum ElevatorState
     {
         Stationary,

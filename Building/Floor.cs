@@ -9,42 +9,72 @@ namespace Building
 {
     public class Floor
     {
-        public int FloorNumber { get; set; }
+        public int FloorNumber { get; set; } //the unique identifier for each instance of Floor.
+
+        //the up and down call buttons belong to the floor!
         public Boolean IsUpButtonPressed { get; set; }
         public Boolean IsDownButtonPressed { get; set; }
-        private List<Person> personsWaitingForUpList = new List<Person>();
-        private List<Person> personsWaitingForDownList = new List<Person>();
 
+        //the collection of persons waiting for either the up, or the down elevator
+        private List<Person> personsWaitingForUpElevator = new List<Person>();
+        private List<Person> personsWaitingForDownElevator = new List<Person>();
 
-        public List<Person> GetPersonsWaitingForUpList()
+        /// <summary>
+        /// Self explanitory.
+        /// </summary>
+        /// <returns></returns>
+        public List<Person> GetPersonsWaitingForUpElevator()
         {
-            return personsWaitingForUpList;
+            return personsWaitingForUpElevator;
         }
 
-        public void SetPersonsWaitingForUpList(List<Person> personsWaitingForUpList)
+        /// <summary>
+        /// Self explanitory.
+        /// </summary>
+        /// <param name="_personsWaitingForUpElevator"></param>
+        public void SetPersonsWaitingForUpElevator(List<Person> _personsWaitingForUpElevator)
         {
-            this.personsWaitingForUpList = personsWaitingForUpList;
+            this.personsWaitingForUpElevator = _personsWaitingForUpElevator;
         }
 
-        public List<Person> GetPersonsWaitingForDownList()
+        /// <summary>
+        /// Self explanitory.
+        /// </summary>
+        /// <returns></returns>
+        public List<Person> GetPersonsWaitingForDownElevator()
         {
-            return personsWaitingForDownList;
+            return personsWaitingForDownElevator;
         }
 
-        public void SetPersonsWaitingForDownList(List<Person> personsWaitingForDownList)
+        /// <summary>
+        /// Self explanitory.
+        /// </summary>
+        /// <param name="_personsWaitingForDownElevator"></param>
+        public void SetPersonsWaitingForDownList(List<Person> _personsWaitingForDownElevator)
         {
-            this.personsWaitingForDownList = personsWaitingForDownList;
+            this.personsWaitingForDownElevator = _personsWaitingForDownElevator;
         }
 
+        /// <summary>
+        /// Self explanitory.
+        /// </summary>
         public void ClearUpList()
         {
-            personsWaitingForUpList.Clear();
-        }
-        public void ClearDownList()
-        {
-            personsWaitingForDownList.Clear();
+            personsWaitingForUpElevator.Clear();
         }
 
+        /// <summary>
+        /// Self explanitory.
+        /// </summary>
+        public void ClearDownList()
+        {
+            personsWaitingForDownElevator.Clear();
+        }
+
+        /// <summary>
+        /// Call this method to add a person to the wait list for an instance of Floor.
+        /// </summary>
+        /// <param name="person"></param>
         public void AddPersonToWaitList(Person person)
         {
             if (person.SourceFloorNumber != this.FloorNumber)
@@ -53,12 +83,12 @@ namespace Building
             }
             else if (person.DestinationFloorNumber > person.SourceFloorNumber)
             {
-                personsWaitingForUpList.Add(person);
+                personsWaitingForUpElevator.Add(person);
                 this.IsUpButtonPressed = true;
             }
             else
             {
-                personsWaitingForDownList.Add(person);
+                personsWaitingForDownElevator.Add(person);
                 this.IsDownButtonPressed=true;
             }
 

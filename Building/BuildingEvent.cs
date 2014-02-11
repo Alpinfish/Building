@@ -9,7 +9,7 @@ namespace Building
     public abstract class BuildingEvent
     {
         /// <summary>
-        /// An abstract class for various events during simulation.
+        /// An abstract class for various events during the simulation.
         /// </summary>
         public abstract void Happen();
     }

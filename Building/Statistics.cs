@@ -12,7 +12,7 @@ namespace Building
         public int numberOfQuitters { get; set; }
         public int totalWaitingTime { get; set; }
 
-        
+        //start fresh
         public Statistics()
         {
             numberOfPersons = 0;
@@ -20,7 +20,7 @@ namespace Building
             totalWaitingTime = 0;
         }
 
-
+        //finish up
         public void PrintStatistics()
         {
             Console.WriteLine("Total Persons Entered : " + numberOfPersons);

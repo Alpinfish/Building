@@ -27,7 +27,7 @@ namespace Building
                 List<Person> personsWaitingForUpList = new List<Person>();
                 List<Person> personsWaitingForDownList = new List<Person>();
 
-                foreach (Person person in floor.GetPersonsWaitingForDownList())
+                foreach (Person person in floor.GetPersonsWaitingForDownElevator())
                 {
                     person.IncrementWaitingTime();
                     if (!person.GiveUpAndLeave())
@@ -37,11 +37,11 @@ namespace Building
                     else
                     {
                         statistics.numberOfQuitters++;
-                        Console.WriteLine("Person No. " + person.PersonNumber + " at _floor No. " + floor.FloorNumber + " gives up and leaves.");
+                        Console.WriteLine("Person No. " + person.Person_Id + " at _floor No. " + floor.FloorNumber + " gives up and leaves.");
                     }
                 }
 
-                foreach (Person person in floor.GetPersonsWaitingForUpList())
+                foreach (Person person in floor.GetPersonsWaitingForUpElevator())
                 {
                     person.IncrementWaitingTime();
                     if (!person.GiveUpAndLeave())
@@ -51,11 +51,11 @@ namespace Building
                     else
                     {
                         statistics.numberOfQuitters++;
-                        Console.WriteLine("Person No. " + person.PersonNumber + " at _floor No. " + floor.FloorNumber + " gives up and leaves.");
+                        Console.WriteLine("Person No. " + person.Person_Id + " at _floor No. " + floor.FloorNumber + " gives up and leaves.");
                     }
                 }
 
-                floor.SetPersonsWaitingForUpList(personsWaitingForUpList);
+                floor.SetPersonsWaitingForUpElevator(personsWaitingForUpList);
                 floor.SetPersonsWaitingForDownList(personsWaitingForDownList);
 
             }
