@@ -1,6 +1,6 @@
-Building
+Building with Elevator
 ============================================================
-**********The classic bilding with elevator exaple**********
+**********The classic building with elevator exaple**********
 ************************************************************
 ************************************************************
 **********Written by Jason A. Astuto************************
